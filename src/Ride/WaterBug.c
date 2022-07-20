@@ -280,7 +280,6 @@ Boolean DoTrig_WaterBug(ObjNode *theNode, ObjNode *whoNode, Byte sideBits)
 static void DoWaterBugCollisionDetect(ObjNode *theNode)
 {
 	HandleCollisions(theNode, CTYPE_MISC);
-	DoFenceCollision(theNode,1);
 }
 
 #pragma mark -

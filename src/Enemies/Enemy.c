@@ -194,10 +194,6 @@ float	realSpeed;
 	}
 			
 	
-				/* CHECK FENCE COLLISION */
-				
-	DoFenceCollision(theEnemy,1);
-
 
 			/********************************/	
 			/* DO FLOOR & CEILING COLLISION */

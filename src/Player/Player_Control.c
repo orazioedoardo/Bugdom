@@ -348,8 +348,6 @@ Boolean				killed = false;
 				/* CHECK FENCE COLLISION */
 				/*************************/
 				
-	DoFenceCollision(gPlayerObj,.7);					// shrink my radius a little bit
-				
 
 	gMyDistToFloor = gCoord.y + gPlayerObj->BottomOff - GetTerrainHeightAtCoord(gCoord.x, gCoord.z, FLOOR);
 	

@@ -208,7 +208,6 @@ static void DoDragonFlyCollisionDetect(ObjNode *theNode)
 float	y;
 
 	HandleCollisions(theNode, CTYPE_MISC);
-	DoFenceCollision(theNode, .3);
 
 			/* SEE IF HIT GROUND */
 			
