@@ -221,13 +221,13 @@ static void MakeAboutScreenObjects(int slideNumber)
 			MAKE_CONTROL_TEXT("Shift (when using mouse)"		, ""				, "Auto-Walk");
 			MAKE_CONTROL_TEXT("Arrows"		, "or     Mouse"	, "Walk/Roll");
 #if __APPLE__
-			MAKE_CONTROL_TEXT("Option"		, "or     Left click"		, "Kick/Boost");
-			MAKE_CONTROL_TEXT("Command"		, "or     Right click"		, "Jump");
+			MAKE_CONTROL_TEXT("Command"		, "or     Left click"		, "Kick/Boost");
+			MAKE_CONTROL_TEXT("Option"		, "or     Middle click"		, "Morph");
 #else
-			MAKE_CONTROL_TEXT("Ctrl"		, "or     Left click"		, "Kick/Boost");
-			MAKE_CONTROL_TEXT("Alt"			, "or     Right click"		, "Jump");
+			MAKE_CONTROL_TEXT("Alt"			, "or     Left click"		, "Kick/Boost");
+			MAKE_CONTROL_TEXT("Ctrl"		, "or     Middle click"		, "Morph");
 #endif
-			MAKE_CONTROL_TEXT("Space"		, "or     Middle click"	, "Morph");
+			MAKE_CONTROL_TEXT("Space"		, "or     Right click"		, "Jump");
 			MAKE_CONTROL_TEXT("Tab"			, ""				, "Buddy Bug");
 			MAKE_CONTROL_TEXT("< / >"		, ""				, "Turn Camera");
 			MAKE_CONTROL_TEXT("1 / 2"		, ""				, "Zoom in/out");
