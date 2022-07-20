@@ -336,7 +336,6 @@ float	dx, dy;
 			gDelta.x *= 100.0f;
 			PlayEffect3D(EFFECT_SPEEDBOOST, &gCoord);
 			StartNitroTrail();			
-			gBallTimer -= .05f;						// lose a bit more ball time
 		}
 	}
 

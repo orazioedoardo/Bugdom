@@ -803,7 +803,6 @@ float	amount;
 
 void LoseBallTime(float amount)
 {
-	gBallTimer -= amount;
 	if (gBallTimer <= 0.0f)
 	{
 		gBallTimer = 0;
@@ -1010,7 +1009,6 @@ void LoseHealth(float amount)
 	if (gGamePrefs.easyMode)								// lose less health in easy mode
 		amount *= .5f;
 
-	gMyHealth -= amount;
 	if (gMyHealth <= 0.0f)	
 	{
 		gMyHealth = 0;

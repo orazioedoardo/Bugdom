@@ -515,7 +515,6 @@ static void MovePlayerBug_Swim(void)
 			if (gCurrentLiquidType == LIQUID_LAVA)
 				gTorchPlayer = true;
 				
-			DrownInLiquid();
 			return;
 		}	
 	}
