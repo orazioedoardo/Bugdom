@@ -450,13 +450,13 @@ QD3DSetupInputType	viewDef;
 	gPlayerMode 			= PLAYER_MODE_BUG;						// init this here so infobar looks correct
 	gPlayerObj 				= nil;
 
-	gUseCyclorama			= !gGamePrefs.lowDetail && gLevelHasCyc[gLevelType];
+	gUseCyclorama			= false;
 	gAutoFadeStartDist		= gUseCyclorama ? gLevelAutoFadeStart[gLevelType] : 0;
 	gDoAutoFade				= gAutoFadeStartDist > 0.0f;
 	gDrawLensFlare			= !gGamePrefs.lowDetail && gLevelHasLensFlare[gLevelType];
 
 	gDoCeiling				= gLevelHasCeiling[gLevelType];
-	gSuperTileActiveRange	= gLevelSuperTileActiveRange[gLevelType];
+	gSuperTileActiveRange	= MAX_SUPERTILE_ACTIVE_RANGE;
 	
 		
 	gAmbientColor 			= gLevelLightColors[gLevelType][0];
