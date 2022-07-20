@@ -248,7 +248,7 @@ long				count;
 
 				/* OPEN FILE */
 					
-	FSMakeFSSpec(gPrefsFolderVRefNum, gPrefsFolderDirID, ":Bugdom:HighScores", &file);
+	FSMakeFSSpec(gPrefsFolderVRefNum, gPrefsFolderDirID, ":BugdomTricks:HighScores", &file);
 	iErr = FSpOpenDF(&file, fsRdWrPerm, &refNum);
 	if (iErr)
 	{

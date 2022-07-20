@@ -36,7 +36,7 @@ static void ReadDataFromPlayfieldFile(void);
 #define	SAVE_GAME_VERSION	0x00000120			// Bugdom v1.2
 
 #define PREFS_HEADER_LENGTH 16
-#define PREFS_FOLDER_NAME "Bugdom"
+#define PREFS_FOLDER_NAME "BugdomTricks"
 #define PREFS_FILE_NAME "Prefs"
 const char PREFS_HEADER_STRING[PREFS_HEADER_LENGTH+1] = "NewBugdomPrefs04";		// Bump this every time prefs struct changes -- note: this will reset user prefs
 
