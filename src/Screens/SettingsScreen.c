@@ -83,6 +83,15 @@ static const SettingEntry gSettingsMenu[] =
 		.choices = {"1","2","3","4","5","6","7","8"},
 	},
 
+	{
+		.kind = kCycler,
+		.ptr = &gGamePrefs.appleKeyboardControls,
+		.label = "Apple Keyboard controls",
+		.nChoices = 2,
+		.callback = UpdateKeyboardControls,
+		.choices = {"No", "Yes"},
+	},
+
 #if _DEBUG
 	{
 		.kind = kCycler,

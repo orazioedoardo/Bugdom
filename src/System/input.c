@@ -29,15 +29,6 @@ static Boolean WeAreFrontProcess(void);
 
 static void ClearMouseState(void);
 
-typedef struct KeyBinding
-{
-	const char* name;
-	int key1;
-	int key2;
-	int mouseButton;
-	int gamepadButton;
-} KeyBinding;
-
 static struct
 {
 	int mouseX;
@@ -150,6 +141,34 @@ KeyBinding gKeyBindings[kKey_MAX] =
 
 #pragma mark -
 
+/****************** SETUP ALTERNATE KEYBOARD CONTROLS **************************/
+
+void UpdateKeyboardControls(void){
+    KeyBinding gMorphKeyBinding, gKickKeyBinding;
+
+    gMorphKeyBinding.name = "Morph Into Ball";
+    gMorphKeyBinding.mouseButton = SDL_BUTTON_MIDDLE;
+    gMorphKeyBinding.gamepadButton = SDL_CONTROLLER_BUTTON_B;
+
+    gKickKeyBinding.name ="Kick / Boost";
+    gKickKeyBinding.mouseButton = SDL_BUTTON_LEFT;
+    gKickKeyBinding.gamepadButton = SDL_CONTROLLER_BUTTON_X;
+
+    if (gGamePrefs.appleKeyboardControls == true){
+        gMorphKeyBinding.key1 = SDL_SCANCODE_LALT;
+        gMorphKeyBinding.key2 = SDL_SCANCODE_RALT;
+        gKickKeyBinding.key1 = SDL_SCANCODE_LGUI;
+        gKickKeyBinding.key2 = SDL_SCANCODE_RGUI;
+    } else {
+        gMorphKeyBinding.key1 = SDL_SCANCODE_LCTRL;
+        gMorphKeyBinding.key2 = SDL_SCANCODE_RCTRL;
+        gKickKeyBinding.key1 = SDL_SCANCODE_LALT;
+        gKickKeyBinding.key2 = SDL_SCANCODE_RALT;
+    }
+
+    gKeyBindings[6] = gMorphKeyBinding;
+    gKeyBindings[9] = gKickKeyBinding;
+}
 
 /************************* WE ARE FRONT PROCESS ******************************/
 
