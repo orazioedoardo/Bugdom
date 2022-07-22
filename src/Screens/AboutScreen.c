@@ -219,15 +219,17 @@ static void MakeAboutScreenObjects(int slideNumber)
 			tmd.coord.x = x-12-80;	tmd.color = kHeadingColor;	TextMesh_Create(&tmd, caption);
 
 			MAKE_CONTROL_TEXT("Shift (when using mouse)"		, ""				, "Auto-Walk");
+if (gGamePrefs.appleKeyboardControls == true) {
+			MAKE_CONTROL_TEXT("Arrows"		, "     or     Mouse"	, "Walk/Roll");
+			MAKE_CONTROL_TEXT("Command"		, "     or     Left click"		, "Kick/Boost");
+			MAKE_CONTROL_TEXT("Option"		, "     or     Middle click"		, "Morph");
+			MAKE_CONTROL_TEXT("Space"		, "     or     Right click"		, "Jump");
+} else {
 			MAKE_CONTROL_TEXT("Arrows"		, "or     Mouse"	, "Walk/Roll");
-#if __APPLE__
-			MAKE_CONTROL_TEXT("Command"		, "or     Left click"		, "Kick/Boost");
-			MAKE_CONTROL_TEXT("Option"		, "or     Middle click"		, "Morph");
-#else
 			MAKE_CONTROL_TEXT("Alt"			, "or     Left click"		, "Kick/Boost");
 			MAKE_CONTROL_TEXT("Ctrl"		, "or     Middle click"		, "Morph");
-#endif
 			MAKE_CONTROL_TEXT("Space"		, "or     Right click"		, "Jump");
+}
 			MAKE_CONTROL_TEXT("Tab"			, ""				, "Buddy Bug");
 			MAKE_CONTROL_TEXT("< / >"		, ""				, "Turn Camera");
 			MAKE_CONTROL_TEXT("1 / 2"		, ""				, "Zoom in/out");

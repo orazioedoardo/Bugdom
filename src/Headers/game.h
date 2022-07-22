@@ -88,6 +88,7 @@ extern	Byte						gCurrentLiquidType;
 extern	Byte						gMyStartAim;
 extern	Byte						gPlayerMode;
 extern	Byte						gTotalSides;
+extern	KeyBinding					gKeyBindings[kKey_MAX];
 extern	CollisionRec				gCollisionList[];
 extern	CommandLineOptions			gCommandLine;
 extern	FSSpec						gDataSpec;

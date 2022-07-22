@@ -20,6 +20,14 @@
 #define	CHAR_DELETE			0x08
 #define CHAR_FORWARD_DELETE	0x7f
 
+typedef struct KeyBinding
+{
+    const char* name;
+    int key1;
+    int key2;
+    int mouseButton;
+    int gamepadButton;
+} KeyBinding;
 
 	/* KEYBOARD EQUATE */
 
@@ -68,6 +76,7 @@ enum
 
 
 void UpdateInput(void);
+void UpdateKeyboardControls(void);
 Boolean GetNewKeyState(unsigned short key);
 Boolean GetKeyState_SDL(unsigned short sdlScanCode);
 Boolean GetKeyState(unsigned short key);
