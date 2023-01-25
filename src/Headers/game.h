@@ -16,6 +16,7 @@ extern "C"
 {
 #endif
 
+#include "pool.h"
 #include "globals.h"
 #include "renderer.h"
 #include "structs.h"
@@ -71,6 +72,8 @@ extern	Boolean						gDoCeiling;
 extern	Boolean						gDrawLensFlare;
 extern	Boolean						gEnteringName;
 extern	Boolean						gGameOverFlag;
+extern	Boolean						gIsInGame;
+extern	Boolean						gIsGamePaused;
 extern	Boolean						gLiquidCheat;
 extern	Boolean						gMuteMusicFlag;
 extern	Boolean						gPlayerCanMove;
@@ -78,8 +81,6 @@ extern	Boolean						gPlayerGotKilledFlag;
 extern	Boolean						gPlayerKnockOnButt;
 extern	Boolean						gPlayerUsingKeyControl;
 extern	Boolean						gRestoringSavedGame;
-extern	Boolean						gShowDebugStats;
-extern	Boolean						gShowDebug;
 extern	Boolean						gSongPlayingFlag;
 extern	Boolean						gSuperTileMemoryListExists;
 extern	Boolean						gTorchPlayer;
@@ -168,8 +169,11 @@ extern	float						gTerrainItemDeleteWindow_Left;
 extern	float						gTerrainItemDeleteWindow_Near;
 extern	float						gTerrainItemDeleteWindow_Right;
 extern	int							gAntialiasingLevelAppliedOnBoot;
+extern	int							gDebugMode;
+extern	int							gFullscreenModeAppliedOnBoot;
 extern	int							gMaxItemsAllocatedInAPass;
 extern	int							gNitroParticleGroup;
+extern	int							gNumObjNodes;
 extern	int							gWindowHeight;
 extern	int							gWindowWidth;
 extern	int 						gCurrentSaveSlot;
@@ -195,7 +199,6 @@ extern	long						gTerrainUnitWidth;
 extern	short						gBestCheckPoint;
 extern	short						gCurrentGasParticleGroup;
 extern	short						gCurrentRopeJoint;
-extern	short						gMainAppRezFile;
 extern	short						gMoney;
 extern	short						gNumBlueClovers;
 extern	short						gNumCollisions;
@@ -224,6 +227,3 @@ extern	unsigned long 				gScore;
 #ifdef __cplusplus
 };
 #endif
-
-#define GAME_ASSERT(condition) do { if (!(condition)) DoAssert(#condition, __func__, __LINE__); } while(0)
-#define GAME_ASSERT_MESSAGE(condition, message) do { if (!(condition)) DoAssert(message, __func__, __LINE__); } while(0)

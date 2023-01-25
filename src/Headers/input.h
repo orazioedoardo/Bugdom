@@ -9,6 +9,14 @@
 #define NUM_MOUSE_SENSITIVITY_LEVELS		5
 #define DEFAULT_MOUSE_SENSITIVITY_LEVEL		(NUM_MOUSE_SENSITIVITY_LEVELS/2)
 
+enum
+{
+	kDragonflySteering_Normal,
+	kDragonflySteering_InvertY,
+	kDragonflySteering_InvertX,
+	kDragonflySteering_InvertXY,
+};
+
 
 			/* ASCII */
 			
@@ -82,6 +90,7 @@ Boolean GetKeyState_SDL(unsigned short sdlScanCode);
 Boolean GetKeyState(unsigned short key);
 Boolean GetNewKeyState_SDL(unsigned short sdlScanCode);
 Boolean GetSkipScreenInput(void);
+Boolean IsCmdQPressed(void);
 void ResetInputState(void);
 void UpdateKeyMap(void);
 
@@ -95,7 +104,9 @@ SDL_GameController* TryOpenController(bool showMessageOnFailure);
 void OnJoystickRemoved(SDL_JoystickID which);
 TQ3Vector2D GetThumbStickVector(bool rightStick);
 
+TQ3Point2D GetMousePosition(void);
 void InitAnalogCursor(void);
 void ShutdownAnalogCursor(void);
 bool MoveAnalogCursor(int* outMouseX, int* outMouseY);
 bool IsAnalogCursorClicked(void);
+void WarpMouseToCenter(void);

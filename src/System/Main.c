@@ -57,14 +57,16 @@ static LevelType	gLevelTable[NUM_LEVELS] =
 	{ LEVEL_TYPE_ANTHILL,	1,	true },				// 9: ant king
 };
 
+Boolean		gIsInGame = false;
+Boolean		gIsGamePaused = false;
+
 u_short		gRealLevel = 0;
 u_short		gLevelType = 0;
 u_short		gAreaNum = 0;
 u_short		gLevelTypeMask = 0;
 
 
-Boolean		gShowDebugStats = false;
-Boolean		gShowDebug = false;
+int			gDebugMode = DEBUG_MODE_OFF;
 Boolean		gLiquidCheat = false;
 Boolean		gUseCyclorama;
 float		gCurrentYon;
@@ -221,8 +223,6 @@ static const TQ3ColorRGBA	gLevelClearColorWithCyc[NUM_LEVEL_TYPES] =
 
 void ToolBoxInit(void)
 {
-	gMainAppRezFile = CurResFile();
-
 		/* FIRST VERIFY SYSTEM BEFORE GOING TOO FAR */
 				
 	VerifySystem();
@@ -245,6 +245,10 @@ void InitPrefs(void)
 	gGamePrefs.showBottomBar		= true;
 	gGamePrefs.force4x3AspectRatio	= false;
 	gGamePrefs.antialiasingLevel	= 0;
+	gGamePrefs.dragonflyControl		= 0;
+#if OSXPPC
+	gGamePrefs.curatedDisplayModeID	= 0;
+#endif
 #if __APPLE__
 	gGamePrefs.appleKeyboardControls= true;
 #else
@@ -346,6 +350,7 @@ static void PlayArea(void)
 float killDelay = KILL_DELAY;						// time to wait after I'm dead before fading out
 float fps;
 
+	gIsInGame = true;
 	CaptureMouse(true);
 	
 	UpdateInput();
@@ -381,7 +386,7 @@ float fps;
 				
 		MoveObjects();
 		MoveSplineObjects();
-		QD3D_MoveParticles();
+		QD3D_MoveShards();
 		MoveParticleGroups();
 		UpdateCamera();
 	
@@ -398,7 +403,7 @@ float fps;
 
 			/* SEE IF PAUSE GAME */
 
-		if (GetNewKeyState(kKey_Pause))				// see if pause/abort
+		if (GetNewKeyState(kKey_Pause) || IsCmdQPressed())		// see if pause/abort
 		{
 			CaptureMouse(false);
 			DoPaused();
@@ -595,9 +600,9 @@ QD3DSetupInputType	viewDef;
 
 			/* INIT OTHER MANAGERS */
 
-	CreateSuperTileMemoryList();	
-	
-	QD3D_InitParticles();	
+	CreateSuperTileMemoryList();
+
+	QD3D_InitShards();
 	InitParticleSystem();
 	InitItemsManager();
 
@@ -626,6 +631,8 @@ QD3DSetupInputType	viewDef;
 
 static void CleanupLevel(void)
 {
+	gIsInGame = false;
+
 	StopAllEffectChannels();
  	EmptySplineObjectList();
 	DeleteAllObjects();
@@ -639,7 +646,7 @@ static void CleanupLevel(void)
 	DisposeLiquids();
 	DeleteAll3DMFGroups();
 	DisposeInfobarTexture();
-	QD3D_DisposeParticles();
+	QD3D_DisposeShards();
 	QD3D_DisposeWindowSetup(&gGameViewInfoPtr);
 	DisposeAllSoundBanks();
 	Pomme_FlushPtrTracking(true);
@@ -649,6 +656,7 @@ static void CleanupLevel(void)
 	gTheQueen = nil;
 	gHiveObj = nil;
 	gAntKingObj = nil;
+	gPlayerObj = nil;
 }
 
 
@@ -732,14 +740,6 @@ static void CheckForCheats(void)
 		if (GetKeyState_SDL(SDL_SCANCODE_F7))		// hurt player
 			PlayerGotHurt(NULL, 1/60.0f, 1.0f, false, true, 1/60.0f);
 
-		if (GetNewKeyState_SDL(SDL_SCANCODE_F8))
-		{
-			gShowDebugStats = !gShowDebugStats;
-			QD3D_UpdateDebugTextMesh(NULL);
-		}
-
-		if (GetNewKeyState_SDL(SDL_SCANCODE_F9))
-			gShowDebug = !gShowDebug;
 	}
 }
 
@@ -814,7 +814,6 @@ unsigned long	someLong;
 	TryOpenController(true);
 
 	ToolBoxInit();
-	SDL_ShowCursor(0);
 
 			/* INIT SOME OF MY STUFF */
 
@@ -835,15 +834,21 @@ unsigned long	someLong;
 	GetDateTime ((unsigned long *)(&someLong));		// init random seed
 	SetMyRandomSeed(someLong);
 
-	SDL_WarpMouseInWindow(gSDLWindow, gWindowWidth/2, gWindowHeight/2);		// prime cursor position
 
 
 			/* DO INTRO */
 
 	Pomme_FlushPtrTracking(false);
 
-	DoPangeaLogo();
+	DoLegalScreen();
+
+	SDL_ShowCursor(0);
+#if !OSXPPC
+	WarpMouseToCenter();							// prime cursor position
+#endif
+
 	CheckDebugShortcutKeysOnBoot();
+	DoPangeaLogo();
 
 
 		/* MAIN LOOP */

@@ -10,7 +10,6 @@
 #include "game.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
-#include <SDL_opengl_glext.h>
 #include <QD3D.h>
 #include <stdlib.h>		// qsort
 #include <stdio.h>
@@ -130,8 +129,6 @@ static SDL_GLContext gGLContext = NULL;
 
 static RendererState gState;
 
-static PFNGLDRAWRANGEELEMENTSPROC __glDrawRangeElements;
-
 float gGammaFadeFactor = 1.0f;
 
 static TQ3TriMeshData* gFullscreenQuad = nil;
@@ -141,12 +138,6 @@ static TQ3TriMeshData* gFullscreenQuad = nil;
 /****************************/
 /*    MACROS/HELPERS        */
 /****************************/
-
-static void Render_GetGLProcAddresses(void)
-{
-	__glDrawRangeElements = (PFNGLDRAWRANGEELEMENTSPROC)SDL_GL_GetProcAddress("glDrawRangeElements");
-	GAME_ASSERT(__glDrawRangeElements);
-}
 
 static void __SetInitialState(GLenum stateEnum, bool* stateFlagPtr, bool initialValue)
 {
@@ -246,7 +237,7 @@ void Render_CreateContext(void)
 
 	// On Windows, proc addresses are only valid for the current context,
 	// so we must get proc addresses everytime we recreate the context.
-	Render_GetGLProcAddresses();
+	//Render_GetGLProcAddresses();
 }
 
 void Render_DeleteContext(void)
@@ -539,11 +530,16 @@ void Render_StartFrame(void)
 
 	// Clear color & depth buffers.
 	SetFlag(glDepthMask, true);	// The depth mask must be re-enabled so we can clear the depth buffer.
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	GLbitfield clearWhat = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+#if OSXPPC
+	// On PPC, bypass clear color in lawn levels (the cyc covers enough of the view)
+	if (gIsInGame && gLevelType == LEVEL_TYPE_LAWN && gCyclorama && gDebugMode != DEBUG_MODE_WIREFRAME)
+		clearWhat &= ~GL_COLOR_BUFFER_BIT;
+#endif
+	glClear(clearWhat);
 
 	GAME_ASSERT(gState.currentTransform == NULL);
-
-//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	GAME_ASSERT(!gFrameStarted);
 	gFrameStarted = true;
@@ -851,7 +847,7 @@ static void SendGeometry(const MeshQueueEntry* entry)
 	}
 
 	// Draw the mesh
-	__glDrawRangeElements(GL_TRIANGLES, 0, mesh->numPoints-1, mesh->numTriangles*3, GL_UNSIGNED_SHORT, mesh->triangles);
+	glDrawElements(GL_TRIANGLES, mesh->numTriangles*3, GL_UNSIGNED_SHORT, mesh->triangles);
 	CHECK_GL_ERROR();
 
 	// Pass 2 to draw transparent meshes without face culling (see above for an explanation)
@@ -861,7 +857,7 @@ static void SendGeometry(const MeshQueueEntry* entry)
 		glCullFace(GL_BACK);	// pass 2: draw frontfaces (cull backfaces)
 
 		// Draw the mesh again
-		__glDrawRangeElements(GL_TRIANGLES, 0, mesh->numPoints - 1, mesh->numTriangles * 3, GL_UNSIGNED_SHORT, mesh->triangles);
+		glDrawElements(GL_TRIANGLES, mesh->numTriangles * 3, GL_UNSIGNED_SHORT, mesh->triangles);
 		CHECK_GL_ERROR();
 	}
 }
@@ -888,7 +884,8 @@ static void BeginDepthPass(const MeshQueueEntry* entry)
 	DisableState(GL_FOG);
 
 	// Texture mapping
-	if ((mesh->texturingMode & kQ3TexturingModeExt_OpacityModeMask) != kQ3TexturingModeOff)
+	if (gDebugMode != DEBUG_MODE_NOTEXTURES &&
+			(mesh->texturingMode & kQ3TexturingModeExt_OpacityModeMask) != kQ3TexturingModeOff)
 	{
 		GAME_ASSERT(mesh->vertexUVs);
 
@@ -928,7 +925,8 @@ static void BeginShadingPass(const MeshQueueEntry* entry)
 	SetState(GL_FOG, gState.sceneHasFog && !(statusBits & STATUS_BIT_NOFOG));
 
 	// Texture mapping
-	if ((mesh->texturingMode & kQ3TexturingModeExt_OpacityModeMask) != kQ3TexturingModeOff)
+	if (gDebugMode != DEBUG_MODE_NOTEXTURES &&
+			(mesh->texturingMode & kQ3TexturingModeExt_OpacityModeMask) != kQ3TexturingModeOff)
 	{
 		EnableState(GL_TEXTURE_2D);
 		EnableClientState(GL_TEXTURE_COORD_ARRAY);
