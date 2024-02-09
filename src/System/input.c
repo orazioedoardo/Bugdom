@@ -14,10 +14,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#if __APPLE__ && !OSXPPC
-#include "killmacmouseacceleration.h"
-#endif
-
 
 /**********************/
 /*     PROTOTYPES     */
@@ -487,12 +483,7 @@ void CaptureMouse(Boolean doCapture)
 	ClearMouseState();
 	EatMouseEvents();
 
-#if __APPLE__ && !OSXPPC
-    if (doCapture)
-        KillMacMouseAcceleration();
-    else
-        RestoreMacMouseAcceleration();
-#endif
+	SetMacLinearMouse(doCapture);
 }
 
 /***************** GET MOUSE DELTA *****************/

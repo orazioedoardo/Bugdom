@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(GAME_TARGET				"Bugdom")
-set(GAME_VERSION			"1.3.3")
+set(GAME_VERSION			"1.3.4")
 
 set(GAME_MAC_ICNS			"packaging/${GAME_TARGET}.icns")
-set(GAME_MAC_COPYRIGHT		"© 1999 Pangea Software, Inc.\n© 2022 Iliyas Jorio.")
+set(GAME_MAC_COPYRIGHT		"© 1999 Pangea Software, Inc.\n© 2024 Iliyas Jorio.")
 set(GAME_MAC_BUNDLE_ID		"io.jor.bugdom")
 set(GAME_MAC_BUNDLE_NAME	"Bugdom")
 
@@ -55,6 +55,8 @@ set(POMME_NO_VIDEO true)
 set(POMME_NO_INPUT true)
 set(POMME_NO_GRAPHICS true)
 set(POMME_NO_MP3 true)
+
+add_compile_definitions(POMME_CASE_SENSITIVE_FSSPEC=1)
 
 #------------------------------------------------------------------------------
 # DEPENDENCIES
@@ -270,6 +272,9 @@ if(APPLE)
 
 		# High-DPI support in Info.plist
 		COMMAND plutil -replace NSHighResolutionCapable -bool true ${BUNDLE_CONTENTS_DIR}/Info.plist
+
+		# Sonoma Game Mode support
+		COMMAND plutil -replace LSApplicationCategoryType -string "public.app-category.games" ${BUNDLE_CONTENTS_DIR}/Info.plist
 
 		# Make it honor mainmenu.nib (use -replace instead of -insert so it doesn't fail on subsequent builds)
 		COMMAND plutil -replace NSMainNibFile -string "mainmenu" ${BUNDLE_CONTENTS_DIR}/Info.plist

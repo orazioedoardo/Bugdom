@@ -657,6 +657,11 @@ static void CleanupLevel(void)
 	gHiveObj = nil;
 	gAntKingObj = nil;
 	gPlayerObj = nil;
+	gCurrentEatingFish = nil;
+	gCurrentEatingBat = nil;
+	gCurrentCarryingFireFly = nil;
+	gCurrentChasingFireFly = nil;
+	gCurrentDragonFly = nil;
 }
 
 
