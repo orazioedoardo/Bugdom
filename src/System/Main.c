@@ -10,7 +10,6 @@
 /****************************/
 
 #include "game.h"
-#include <string.h>
 
 
 /****************************/
@@ -79,9 +78,6 @@ Boolean		gPlayerGotKilledFlag,gWonGameFlag,gRestoringSavedGame = false;
 QD3DSetupOutputType		*gGameViewInfoPtr = nil;
 
 PrefsType	gGamePrefs;
-
-FSSpec		gDataSpec;
-
 
 TQ3Vector3D		gLightDirection1 = { .4, -.35, 1 };		// also serves as lense flare vector
 TQ3Vector3D		gLightDirection2;
@@ -235,20 +231,19 @@ void ToolBoxInit(void)
 
 void InitPrefs(void)
 {
-	memset(&gGamePrefs, 0, sizeof(PrefsType));
+	SDL_memset(&gGamePrefs, 0, sizeof(PrefsType));
 
 	gGamePrefs.easyMode				= false;	
-	gGamePrefs.playerRelativeKeys	= false;	
-	gGamePrefs.fullscreen			= true;
-	gGamePrefs.lowDetail			= false;
+	gGamePrefs.playerRelativeKeys	= false;
 	gGamePrefs.mouseSensitivityLevel= DEFAULT_MOUSE_SENSITIVITY_LEVEL;
+	gGamePrefs.dragonflyControl		= 0;
+	gGamePrefs.lowDetail			= false;
 	gGamePrefs.showBottomBar		= true;
 	gGamePrefs.force4x3AspectRatio	= false;
+	gGamePrefs.fullscreen			= true;
+	gGamePrefs.vsync				= true;
 	gGamePrefs.antialiasingLevel	= 0;
-	gGamePrefs.dragonflyControl		= 0;
-#if OSXPPC
-	gGamePrefs.curatedDisplayModeID	= 0;
-#endif
+	gGamePrefs.displayNumMinus1		= 0;
 #if __APPLE__
 	gGamePrefs.appleKeyboardControls= true;
 #else
@@ -816,7 +811,7 @@ unsigned long	someLong;
 				/* BOOT STUFF */
 				/**************/
 
-	TryOpenController(true);
+	TryOpenGamepad(true);
 
 	ToolBoxInit();
 
@@ -847,10 +842,8 @@ unsigned long	someLong;
 
 	DoLegalScreen();
 
-	SDL_ShowCursor(0);
-#if !OSXPPC
+	SDL_HideCursor();
 	WarpMouseToCenter();							// prime cursor position
-#endif
 
 	CheckDebugShortcutKeysOnBoot();
 	DoPangeaLogo();
