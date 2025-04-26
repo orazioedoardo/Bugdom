@@ -114,8 +114,8 @@ KeyBinding gKeyBindings[kKey_MAX] =
 [kKey_ZoomOut			] = { "Zoom Out",			SDL_SCANCODE_1,			0,						0,					SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER, },
 [kKey_MorphPlayer		] = { "Morph Into Ball",	DEFAULT_MORPH_SCANCODE1,DEFAULT_MORPH_SCANCODE2,SDL_BUTTON_MIDDLE,	SDL_GAMEPAD_BUTTON_EAST, },
 [kKey_BuddyAttack		] = { "Buddy Attack",		SDL_SCANCODE_TAB,		0,						0,					SDL_GAMEPAD_BUTTON_NORTH, },
-[kKey_Jump				] = { "Jump / Boost",		DEFAULT_JUMP_SCANCODE1,	DEFAULT_JUMP_SCANCODE2,	SDL_BUTTON_RIGHT,	SDL_GAMEPAD_BUTTON_SOUTH, },
-[kKey_Kick				] = { "Kick / Boost",		DEFAULT_KICK_SCANCODE1, DEFAULT_KICK_SCANCODE2, SDL_BUTTON_LEFT,	SDL_GAMEPAS_BUTTON_WEST, },
+[kKey_Jump				] = { "Jump / Boost",		SDL_SCANCODE_SPACE,		0,						SDL_BUTTON_RIGHT,	SDL_GAMEPAD_BUTTON_SOUTH, },
+[kKey_Kick				] = { "Kick / Boost",		DEFAULT_KICK_SCANCODE1, DEFAULT_KICK_SCANCODE2, SDL_BUTTON_LEFT,	SDL_GAMEPAD_BUTTON_WEST, },
 [kKey_AutoWalk			] = { "Auto-Walk",			SDL_SCANCODE_LSHIFT,	SDL_SCANCODE_RSHIFT,	0,					SDL_GAMEPAD_BUTTON_INVALID, },
 [kKey_Forward			] = { "Forward",			SDL_SCANCODE_UP,		SDL_SCANCODE_W,			0,					SDL_GAMEPAD_BUTTON_DPAD_UP, },
 [kKey_Backward			] = { "Backward",			SDL_SCANCODE_DOWN,		SDL_SCANCODE_S,			0,					SDL_GAMEPAD_BUTTON_DPAD_DOWN, },
@@ -135,6 +135,7 @@ KeyBinding gKeyBindings[kKey_MAX] =
 [kKey_UI_CharDeleteFwd	] = { "DO_NOT_REBIND",		SDL_SCANCODE_DELETE,	0,						0,					SDL_GAMEPAD_BUTTON_INVALID, },
 [kKey_UI_CharOK			] = { "DO_NOT_REBIND",		SDL_SCANCODE_DELETE,	0,						0,					SDL_GAMEPAD_BUTTON_SOUTH, },
 };
+
 
 
 #pragma mark -
