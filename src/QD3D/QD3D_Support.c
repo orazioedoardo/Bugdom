@@ -336,7 +336,7 @@ void QD3D_DrawScene(QD3DSetupOutputType *setupInfo, void (*drawRoutine)(const QD
 
 	Render_EndFrame();
 
-	SDL_GL_SwapWindow(gSDLWindow);
+	SwapGameWindow();
 }
 
 
@@ -531,6 +531,46 @@ void QD3D_CalcFramesPerSecond(void)
 		performanceFrequency = SDL_GetPerformanceFrequency();
 	}
 
+#if __EMSCRIPTEN__
+	// In the browser, frames are paced by requestAnimationFrame (see SwapGameWindow), so there's
+	// no need to cap the framerate here. The browser's frame timestamps are aligned to the display
+	// refresh, whereas the wall clock is read whenever the browser happens to wake us up (which
+	// jitters by a few ms) and is rounded to 0.1-1 ms (so two readings within one frame may be equal).
+
+	static uint32_t prevAnimationFrameCount = 0;
+	static uint32_t prevNumAnimationFrames = 0;
+	static double prevAnimationFrameTime = 0;
+
+	currTime = SDL_GetPerformanceCounter();
+	uint32_t numAnimationFrames = gAnimationFrameCount - prevAnimationFrameCount;
+
+	if (numAnimationFrames == 0)
+	{
+		// Called again within the same frame (e.g. to prime the timer before a loop):
+		// as far as the display is concerned, no time has passed
+		gFramesPerSecond = MAX_FPS;
+	}
+	else if (numAnimationFrames == 1 && prevNumAnimationFrames == 1)
+	{
+		// Steady state: called once per frame
+		gFramesPerSecond = 1000.0f / (float) (gAnimationFrameTime - prevAnimationFrameTime);
+	}
+	else
+	{
+		// First frame of a loop, or after a loading screen: use the wall clock like natively
+		uint64_t deltaTime = currTime - prevTime;
+		gFramesPerSecond = deltaTime > 0 ? performanceFrequency / (float) deltaTime : MAX_FPS;
+	}
+
+	prevAnimationFrameCount = gAnimationFrameCount;
+	prevNumAnimationFrames = numAnimationFrames;
+	prevAnimationFrameTime = gAnimationFrameTime;
+
+	if (gFramesPerSecond > MAX_FPS)
+		gFramesPerSecond = MAX_FPS;
+	if (gFramesPerSecond < MIN_FPS)
+		gFramesPerSecond = MIN_FPS;
+#else
 	slow_down:
 	currTime = SDL_GetPerformanceCounter();
 	uint64_t deltaTime = currTime - prevTime;
@@ -557,6 +597,7 @@ void QD3D_CalcFramesPerSecond(void)
 			gFramesPerSecond = MIN_FPS;
 		}
 	}
+#endif
 
 	// In debug builds, speed up with KP_PLUS or LT on gamepad
 #if _DEBUG

@@ -12,6 +12,10 @@
 #include <SDL3/SDL_opengl.h>
 #include <QD3D.h>
 
+#if __EMSCRIPTEN__
+#include <gl4esinit.h>
+#endif
+
 
 #pragma mark -
 
@@ -232,6 +236,10 @@ void Render_CreateContext(void)
 	gGLContext = SDL_GL_CreateContext(gSDLWindow);
 
 	GAME_ASSERT(gGLContext);
+
+#if __EMSCRIPTEN__
+	initialize_gl4es();																// gl4es needs a live WebGL context
+#endif
 
 	// On Windows, proc addresses are only valid for the current context,
 	// so we must get proc addresses everytime we recreate the context.

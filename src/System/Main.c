@@ -238,13 +238,17 @@ void InitPrefs(void)
 	gGamePrefs.mouseSensitivityLevel= DEFAULT_MOUSE_SENSITIVITY_LEVEL;
 	gGamePrefs.dragonflyControl		= 0;
 	gGamePrefs.lowDetail			= false;
-	gGamePrefs.showBottomBar		= true;
+	gGamePrefs.showBottomBar		= false;
 	gGamePrefs.force4x3AspectRatio	= false;
+#if __EMSCRIPTEN__
+	gGamePrefs.fullscreen			= false;	// stay inside the web page; the page does fullscreen
+#else
 	gGamePrefs.fullscreen			= true;
+#endif
 	gGamePrefs.vsync				= true;
 	gGamePrefs.antialiasingLevel	= 0;
 	gGamePrefs.displayNumMinus1		= 0;
-#if __APPLE__
+#if __APPLE__ && !__EMSCRIPTEN__
 	gGamePrefs.appleKeyboardControls= true;
 #else
 	gGamePrefs.appleKeyboardControls= false;

@@ -260,6 +260,7 @@ err:
 	count = sizeof(HighScoreType) * NUM_SCORES;
 	FSWrite(refNum, &count, (Ptr)&gHighScores[0]);
 	FSClose(refNum);			
+	SyncPrefsFolder();
 
 }
 

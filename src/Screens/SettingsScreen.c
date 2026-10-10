@@ -96,6 +96,7 @@ static const SettingEntry gSettingsMenu[] =
 		.choices = {"Normal", "Invert Y axis", "Invert X axis", "Invert X & Y"},
 	},
 
+#if !__EMSCRIPTEN__		// browsers lose Cmd key releases, so Cmd can't be a game key on the web
 	{
 		.kind = kCycler,
 		.ptr = &gGamePrefs.appleKeyboardControls,
@@ -104,6 +105,7 @@ static const SettingEntry gSettingsMenu[] =
 		.callback = UpdateKeyboardControls,
 		.choices = {"No", "Yes"},
 	},
+#endif
 
 	{
 		.kind = kCycler,
@@ -142,6 +144,7 @@ static const SettingEntry gSettingsMenu[] =
 
 static SettingEntry gVideoMenu[] =
 {
+#if !__EMSCRIPTEN__		// the web page handles fullscreen
 	{
 		.kind = kCycler,
 		.ptr = &gGamePrefs.fullscreen,
@@ -150,6 +153,7 @@ static SettingEntry gVideoMenu[] =
 		.nChoices = 2,
 		.choices = {"No", "Yes"},
 	},
+#endif
 
 	{
 		.kind = kCycler,
@@ -168,6 +172,7 @@ static SettingEntry gVideoMenu[] =
 		.choices = {"Fit to screen", "Pillarboxed 4:3"},
 	},
 
+#if !__EMSCRIPTEN__		// no MSAA setting or display choice in the browser
 	{
 		.kind = kCycler,
 		.ptr = &gGamePrefs.antialiasingLevel,
@@ -195,6 +200,7 @@ static SettingEntry gVideoMenu[] =
 			"Display 8",
 		},
 	},
+#endif
 
 	// End sentinel
 	{

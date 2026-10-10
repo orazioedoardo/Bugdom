@@ -377,6 +377,7 @@ void UpdateKeyMap(void)
 		/* WHILE WE'RE HERE LET'S DO SOME SPECIAL KEY CHECKS */
 		/*****************************************************/
 
+#if !__EMSCRIPTEN__		// on the web, the page toggles fullscreen with Cmd+F
 	if (GetNewKeyState_SDL(SDL_SCANCODE_RETURN)
 		&& (GetKeyState_SDL(SDL_SCANCODE_LALT) || GetKeyState_SDL(SDL_SCANCODE_RALT)))
 	{
@@ -385,6 +386,7 @@ void UpdateKeyMap(void)
 
 		ResetInputState();
 	}
+#endif
 
 	if ((!gIsInGame || gIsGamePaused) && IsCmdQPressed())
 	{
