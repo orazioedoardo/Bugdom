@@ -469,12 +469,21 @@ OSErr MakePrefsFSSpec(const char* filename, bool createFolder, FSSpec* spec)
 // Call this after writing to it so that the changes survive a page reload.
 //
 
+#if __EMSCRIPTEN__
+// Waits for the write to finish: the game may quit right after saving, and exiting
+// the runtime closes the database, failing any write still in flight.
+EM_ASYNC_JS(void, SyncFSToIndexedDB, (void), {
+	await new Promise((resolve) => FS.syncfs(false, (err) => {
+		if (err) console.warn("Saving files failed:", err);
+		resolve();
+	}));
+});
+#endif
+
 void SyncPrefsFolder(void)
 {
 #if __EMSCRIPTEN__
-	EM_ASM(FS.syncfs(false, function (err) {
-		if (err) console.warn("Saving files failed:", err);
-	}););
+	SyncFSToIndexedDB();
 #endif
 }
 
